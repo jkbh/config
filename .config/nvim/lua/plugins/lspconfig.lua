@@ -49,8 +49,8 @@ return {
 
 		local texlab_on_attach = function(_, bufnr)
 			on_attach(_, bufnr)
-			local opts = { buffer = bufnr }
-			vim.keymap.set('n', '<leader>lb', '<cmd>TexlabBuild<CR>', opts)
+			local opts = { buffer = bufnr, desc = "Build with latexmk" }
+			vim.keymap.set('n', '<leader>lm', '<cmd>TexlabBuild<CR>', opts)
 		end
 		lspconfig['texlab'].setup {
 			on_attach = texlab_on_attach,
@@ -58,7 +58,8 @@ return {
 			settings = {
 				texlab = {
 					build = {
-						onSave = true
+						args = { "-cd", "%f" },
+						onSave = true,
 					},
 					chktex = {
 						onOpenAndSave = true
