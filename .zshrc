@@ -101,4 +101,4 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias vim=nvim
-alias config='/usr/bin/git --git-dir=/home/meinsein/.cfg/ --work-tree=/home/meinsein'
+alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
