@@ -8,6 +8,11 @@ return {
 	config = function()
 		local lspconfig = require('lspconfig')
 
+		vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
+		vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
+		vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
+		vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
+
 		local on_attach = function(_, bufnr)
 			local opts = { buffer = bufnr }
 			local keymap = require('vim.keymap')
@@ -15,6 +20,7 @@ return {
 			keymap.set('n', 'K', vim.lsp.buf.hover, opts)
 			keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
 			keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
+			keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
 
 
 			vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
