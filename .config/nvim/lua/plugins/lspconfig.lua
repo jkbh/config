@@ -2,10 +2,17 @@ return {
 	'neovim/nvim-lspconfig',
 	event = { 'BufReadPre', 'BufNewFile' },
 	dependencies = {
+		'williamboman/mason.nvim',
+		'williamboman/mason-lspconfig.nvim',
 		"hrsh7th/cmp-nvim-lsp",
-		{ "j-hui/fidget.nvim", tag = 'legacy', opts = {} }
+		{ "j-hui/fidget.nvim", tag = 'legacy', opts = {} },
 	},
 	config = function()
+		require('mason').setup()
+		require('mason-lspconfig').setup({
+			ensure_installed = { 'lua_ls', 'pyright', 'rust_analyzer', 'texlab' }
+		})
+
 		local lspconfig = require('lspconfig')
 
 		vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
@@ -22,7 +29,7 @@ return {
 			keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
 			keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
 
-
+			-- Create :Format command
 			vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
 				vim.lsp.buf.format()
 			end, { desc = 'Format buffer with LSP' })
@@ -33,6 +40,18 @@ return {
 		lspconfig['rust_analyzer'].setup {
 			on_attach = on_attach,
 			capabilities = capabilities,
+			settings = {
+				['rust-analyzer'] = {
+					check = {
+						overrideCommand = "cargo clippy"
+					},
+					imports = {
+						granularity = {
+							group = "module"
+						}
+					}
+				}
+			}
 		}
 
 		lspconfig['lua_ls'].setup {
@@ -58,6 +77,7 @@ return {
 			local opts = { buffer = bufnr, desc = "Build with latexmk" }
 			vim.keymap.set('n', '<leader>lm', '<cmd>TexlabBuild<CR>', opts)
 		end
+
 		lspconfig['texlab'].setup {
 			on_attach = texlab_on_attach,
 			capabilities = capabilities,
@@ -130,7 +150,4 @@ return {
 			end,
 		})
 	end
-
-
-
 }
