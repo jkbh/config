@@ -10,15 +10,16 @@ return {
 	config = function()
 		require('mason').setup()
 		require('mason-lspconfig').setup({
-			ensure_installed = { 'lua_ls', 'pyright', 'rust_analyzer', 'texlab' }
+			ensure_installed = { 'lua_ls', 'pyright', 'rust_analyzer', 'texlab', 'tsserver' }
 		})
 
 		local lspconfig = require('lspconfig')
+		local telescope = require('telescope.builtin')
 
 		vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
-		vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
-		vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
-		vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
+		vim.keymap.set('n', 'öd', vim.diagnostic.goto_prev)
+		vim.keymap.set('n', 'äd', vim.diagnostic.goto_next)
+		vim.keymap.set('n', '<leader>q', telescope.diagnostics)
 
 		local on_attach = function(_, bufnr)
 			local opts = { buffer = bufnr }
@@ -37,13 +38,23 @@ return {
 
 		local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
+		lspconfig['pyright'].setup {
+			on_attach = on_attach,
+			capabilities = capabilities,
+		}
+
+		lspconfig['tsserver'].setup {
+			on_attach = on_attach,
+			capabilities = capabilities,
+		}
+
 		lspconfig['rust_analyzer'].setup {
 			on_attach = on_attach,
 			capabilities = capabilities,
 			settings = {
 				['rust-analyzer'] = {
 					check = {
-						overrideCommand = "cargo clippy"
+						command = "clippy"
 					},
 					imports = {
 						granularity = {
@@ -72,26 +83,10 @@ return {
 			}
 		}
 
-		local texlab_on_attach = function(_, bufnr)
-			on_attach(_, bufnr)
-			local opts = { buffer = bufnr, desc = "Build with latexmk" }
-			vim.keymap.set('n', '<leader>lm', '<cmd>TexlabBuild<CR>', opts)
-		end
 
 		lspconfig['texlab'].setup {
-			on_attach = texlab_on_attach,
+			on_attach = on_attach,
 			capabilities = capabilities,
-			settings = {
-				texlab = {
-					build = {
-						args = { "-cd", "%f" },
-						onSave = true,
-					},
-					chktex = {
-						onOpenAndSave = true
-					}
-				}
-			}
 		}
 		-- Create an augroup that is used for managing our formatting autocmds.
 		--      We need one augroup per client to make sure that multiple clients

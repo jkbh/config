@@ -15,15 +15,15 @@ return {
 
 			highlight = { enable = true },
 			indent = { enable = true },
-			incremental_selection = {
-				enable = true,
-				keymaps = {
-					init_selection = '<c-space>',
-					node_incremental = '<c-space>',
-					scope_incremental = '<c-s>',
-					node_decremental = '<M-space>',
-				},
-			},
+			-- incremental_selection = {
+			-- 	enable = true,
+			-- 	keymaps = {
+			-- 		init_selection = '<c-space>',
+			-- 		node_incremental = '<c-space>',
+			-- 		scope_incremental = '<c-s>',
+			-- 		node_decremental = '<M-space>',
+			-- 	},
+			-- },
 			textobjects = {
 				select = {
 					enable = true,
@@ -42,20 +42,20 @@ return {
 					enable = true,
 					set_jumps = true, -- whether to set jumps in the jumplist
 					goto_next_start = {
-						[']m'] = '@function.outer',
-						[']]'] = '@class.outer',
+						['äm'] = '@function.outer',
+						['ää'] = '@class.outer',
 					},
 					goto_next_end = {
-						[']M'] = '@function.outer',
-						[']['] = '@class.outer',
+						['äM'] = '@function.outer',
+						['äö'] = '@class.outer',
 					},
 					goto_previous_start = {
-						['[m'] = '@function.outer',
-						['[['] = '@class.outer',
+						['öm'] = '@function.outer',
+						['öö'] = '@class.outer',
 					},
 					goto_previous_end = {
-						['[M'] = '@function.outer',
-						['[]'] = '@class.outer',
+						['öM'] = '@function.outer',
+						['öä'] = '@class.outer',
 					},
 				},
 				swap = {
@@ -68,6 +68,14 @@ return {
 					},
 				},
 			},
+		}
+		local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+		parser_config.actr = {
+			install_info = {
+				url = "~/dev/tree-sitter-actr",
+				files = { "src/parser.c" },
+			},
+			filetype = "lisp"
 		}
 	end
 }

@@ -7,4 +7,4 @@ vim.o.undofile = true                  -- Save undo history
 vim.o.breakindent = true               -- Enable break indent
 vim.o.clipboard = 'unnamedplus'        -- Sync os and nvim clipboard
 vim.o.cursorline = true                -- Highlight full cursor line
-vim.o.background = 'light'             -- Use light mode
+vim.o.background = 'dark'              -- Use light mode
