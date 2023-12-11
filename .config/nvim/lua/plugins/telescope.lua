@@ -20,7 +20,7 @@ return { {
 			}
 		}
 		require('telescope').load_extension('fzf')
-		require('telescope').load_extension('file_browser')
+		-- require('telescope').load_extension('file_browser')
 
 		local keymap = require('vim.keymap')
 		local builtin = require('telescope.builtin')
@@ -30,15 +30,16 @@ return { {
 		keymap.set('n', '<leader>fs', builtin.live_grep)
 	end
 },
-	{
-		"nvim-telescope/telescope-file-browser.nvim",
-		dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
-		config = function()
-			vim.api.nvim_set_keymap(
-				"n",
-				"<space>fb",
-				":Telescope file_browser path=%:p:h select_buffer=true<CR>",
-				{ noremap = true }
-			)
-		end
-	} }
+	-- {
+	-- 	"nvim-telescope/telescope-file-browser.nvim",
+	-- 	dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
+	-- 	config = function()
+	-- 		vim.api.nvim_set_keymap(
+	-- 			"n",
+	-- 			"<space>fb",
+	-- 			":Telescope file_browser path=%:p:h select_buffer=true<CR>",
+	-- 			{ noremap = true }
+	-- 		)
+	-- 	end
+	-- } }
+}

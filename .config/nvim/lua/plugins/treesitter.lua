@@ -69,13 +69,5 @@ return {
 				},
 			},
 		}
-		local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-		parser_config.actr = {
-			install_info = {
-				url = "~/dev/tree-sitter-actr",
-				files = { "src/parser.c" },
-			},
-			filetype = "lisp"
-		}
 	end
 }

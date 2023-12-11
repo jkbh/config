@@ -16,16 +16,20 @@ return {
 	-- 		vim.cmd [[colorscheme catppuccin]]
 	-- 	end
 	-- },
-	{
-		"ellisonleao/gruvbox.nvim",
-		priority = 1000,
-		config = function()
-			vim.cmd [[colorscheme gruvbox]]
-		end,
-	},
+	-- {
+	-- 	"ellisonleao/gruvbox.nvim",
+	-- 	priority = 1000,
+	-- 	config = function()
+	-- 		vim.cmd [[colorscheme gruvbox]]
+	-- 	end,
+	-- },
 	{
 		'nvim-lualine/lualine.nvim',
 		dependencies = { 'nvim-tree/nvim-web-devicons', opt = true },
-		opts = { theme = "gruvbox" }
+		opts = {
+			icons_enabled = false,
+			component_seperators = '|',
+			section_seperators = '',
+		}
 	}
 }

@@ -15,19 +15,22 @@ return {
 		local lspconfig = require('lspconfig')
 		local telescope = require('telescope.builtin')
 
-		vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
-		vim.keymap.set('n', 'öd', vim.diagnostic.goto_prev)
-		vim.keymap.set('n', 'äd', vim.diagnostic.goto_next)
-		vim.keymap.set('n', '<leader>q', telescope.diagnostics)
 
 		local on_attach = function(_, bufnr)
 			local opts = { buffer = bufnr }
 			local keymap = require('vim.keymap')
 
-			keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-			keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+			-- Edit Actions
 			keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
 			keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
+
+			-- Analysis
+			keymap.set('n', 'gd', telescope.lsp_definitions, opts)
+			keymap.set('n', 'gr', telescope.lsp_references, opts)
+			keymap.set('n', 'gI', telescope.lsp_implementations, opts)
+
+			-- Hover
+			keymap.set('n', 'K', vim.lsp.buf.hover, opts)
 
 			-- Create :Format command
 			vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
