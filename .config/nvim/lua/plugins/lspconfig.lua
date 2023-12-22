@@ -7,15 +7,7 @@ return {
 		"hrsh7th/cmp-nvim-lsp",
 	},
 	config = function()
-		require('mason').setup()
-		require('mason-lspconfig').setup({
-			ensure_installed = { 'lua_ls', 'pyright', 'rust_analyzer', 'texlab', 'tsserver' }
-		})
-
-		local lspconfig = require('lspconfig')
 		local telescope = require('telescope.builtin')
-
-
 		local on_attach = function(_, bufnr)
 			local opts = { buffer = bufnr }
 			local keymap = require('vim.keymap')
@@ -38,22 +30,13 @@ return {
 			end, { desc = 'Format buffer with LSP' })
 		end
 
-		local capabilities = require('cmp_nvim_lsp').default_capabilities()
+		require('mason').setup()
+		require('mason-lspconfig').setup()
 
-		lspconfig['pyright'].setup {
-			on_attach = on_attach,
-			capabilities = capabilities,
-		}
-
-		lspconfig['tsserver'].setup {
-			on_attach = on_attach,
-			capabilities = capabilities,
-		}
-
-		lspconfig['rust_analyzer'].setup {
-			on_attach = on_attach,
-			capabilities = capabilities,
-			settings = {
+		local servers = {
+			ruff_lsp = {},
+			jedi_language_server = {},
+			rust_analyzer = {
 				['rust-analyzer'] = {
 					check = {
 						command = "clippy"
@@ -64,31 +47,31 @@ return {
 						}
 					}
 				}
-			}
-		}
-
-		lspconfig['lua_ls'].setup {
-			on_attach = on_attach,
-			capabilities = capabilities,
-			settings = {
+			},
+			lua_ls = {
 				Lua = {
-					diagnostics = {
-						globals = { 'vim' }
-					},
-					workspace = {
-						library = {
-							[vim.fn.expand('$VIMRUNTIME/lua')] = true,
-							[vim.fn.stdpath('config') .. '/lua'] = true,
-						}
-					}
-				}
+					workspace = { checkThirdParty = false },
+					telemetry = { enable = false },
+					diagnostics = { disable = { 'missing-fields' } },
+				},
 			}
 		}
 
+		local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-		lspconfig['texlab'].setup {
-			on_attach = on_attach,
-			capabilities = capabilities,
+		require('mason-lspconfig').setup {
+			ensure_installed = vim.tbl_keys(servers)
+		}
+
+		require('mason-lspconfig').setup_handlers {
+			function(server_name)
+				require('lspconfig')[server_name].setup {
+					capabilities = capabilities,
+					on_attach = on_attach,
+					settings = servers[server_name],
+					file_types = (servers[server_name] or {}).filetypes,
+				}
+			end
 		}
 		-- Create an augroup that is used for managing our formatting autocmds.
 		--      We need one augroup per client to make sure that multiple clients
